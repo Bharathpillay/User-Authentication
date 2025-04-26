@@ -1,0 +1,127 @@
+﻿@model IEnumerable<SimpleSite.Models.UserViewModel>
+
+@{
+    ViewData["Title"] = "Users";
+    var editingUserId = ViewBag.EditingUserId as int?;
+    var editModel = ViewBag.EditModel as SimpleSite.Models.StudentViewModel;
+    var editRole = ViewBag.Role as string;
+    var isStudent = editRole == "Student";
+    var departments = ViewBag.Departments as List<SimpleSite.Models.Department> ?? new List<SimpleSite.Models.Department>();
+}
+
+<div class="container mt-5">
+    <h1 class="mb-4">Users</h1>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    <p>
+        <a asp-action="CreateStudent" class="btn btn-primary">Add New Student</a>
+        <a asp-action="CreateStaff" class="btn btn-primary">Add New Staff</a>
+    </p>
+    @if (!Model.Any())
+    {
+        <p>No users to display.</p>
+    }
+    else
+    {
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Department</th>
+                    <th>CGPA</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    if (editingUserId == user.Id)
+                    {
+                        <tr>
+                            <td colspan="7">
+                                <form asp-action="Edit" method="post">
+                                    <input type="hidden" name="Id" value="@editModel.Id" />
+                                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                                    <div class="form-group mb-3">
+                                        <label for="Name_@user.Id">Name</label>
+                                        <input id="Name_@user.Id" name="Name" class="form-control" value="@editModel.Name" />
+                                        <span asp-validation-for="@editModel.Name" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="Email_@user.Id">Email</label>
+                                        <input id="Email_@user.Id" name="Email" class="form-control" value="@editModel.Email" />
+                                        <span asp-validation-for="@editModel.Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group mb-3">
+                                        <label for="Password_@user.Id">New Password (leave blank to keep current)</label>
+                                        <input id="Password_@user.Id" name="Password" class="form-control" type="password" />
+                                        <span asp-validation-for="@editModel.Password" class="text-danger"></span>
+                                    </div>
+                                    @if (isStudent)
+                                    {
+                                        <div class="form-group mb-3">
+                                            <label for="DepartmentId_@user.Id">Department</label>
+                                            <select id="DepartmentId_@user.Id" name="DepartmentId" class="form-control">
+                                                <option value="0">Select a department</option>
+                                                @foreach (var dept in departments)
+                                                {
+                                                    <option value="@dept.Id" selected="@(editModel.DepartmentId == dept.Id)">@dept.Name</option>
+                                                }
+                                            </select>
+                                            <span asp-validation-for="@editModel.DepartmentId" class="text-danger"></span>
+                                        </div>
+                                        <div class="form-group mb-3">
+                                            <label for="CGPA_@user.Id">CGPA</label>
+                                            <input id="CGPA_@user.Id" name="CGPA" class="form-control" value="@(editModel.CGPA?.ToString("F2"))" />
+                                            <span asp-validation-for="@editModel.CGPA" class="text-danger"></span>
+                                        </div>
+                                    }
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                                    </div>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>@user.Name</td>
+                            <td>@user.Email</td>
+                            <td>@user.Role</td>
+                            <td>@(user.Status == 1 ? "Active" : "Inactive")</td>
+                            <td>@user.DepartmentName</td>
+                            <td>@(user.CGPA?.ToString("F2") ?? "N/A")</td>
+                            <td>
+                                <a href="@Url.Action("Index", new { editingUserId = user.Id })" class="btn btn-sm btn-warning">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@user.Id" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete @user.Name?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

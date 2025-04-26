@@ -1,0 +1,54 @@
+﻿@model SimpleSite.Models.StudentViewModel
+
+@{
+    ViewData["Title"] = "Edit User";
+    var isStudent = ViewBag.Role == "Student";
+}
+
+<h1>Edit User</h1>
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="control-label"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="control-label">New Password (leave blank to keep current)</label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    @if (isStudent)
+    {
+        <div class="form-group">
+            <label asp-for="DepartmentId" class="control-label">Department</label>
+            <select asp-for="DepartmentId" class="form-control">
+                <option value="0">Select a department</option>
+                @foreach (var dept in ViewBag.Departments)
+                {
+                    <option value="@dept.Id">@dept.Name</option>
+                }
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CGPA" class="control-label"></label>
+            <input asp-for="CGPA" class="form-control" />
+            <span asp-validation-for="CGPA" class="text-danger"></span>
+        </div>
+    }
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

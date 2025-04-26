@@ -1,0 +1,29 @@
+﻿@model SimpleSite.Models.Student
+
+@{
+    ViewData["Title"] = "Student Dashboard";
+}
+
+<h1>Student Dashboard</h1>
+<p><strong>Name:</strong> @Model.User.Name</p>
+<p><strong>Department:</strong> @Model.Department.Name</p>
+<p><strong>CGPA:</strong> @(Model.CGPA?.ToString("F2") ?? "N/A")</p>
+
+<h3>Semester Grades</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Semester</th>
+            <th>Grade</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var semester in Model.Semesters)
+        {
+            <tr>
+                <td>@semester.SemesterNumber</td>
+                <td>@(semester.Grade?.ToString("F2") ?? "N/A")</td>
+            </tr>
+        }
+    </tbody>
+</table>
