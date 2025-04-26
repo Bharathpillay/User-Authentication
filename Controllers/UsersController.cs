@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace SimpleSite.Controllers
 {
+    //Admin can be use
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
