@@ -9,6 +9,6 @@
         [Required, StringLength(100)]
         public string Name { get; set; }
         public List<DepartmentSubject> DepartmentSubjects { get; set; } = new List<DepartmentSubject>();
-        public List<StaffSubject> StaffSubjects { get; set; } = new List<StaffSubject>();
+        public List<StaffSubject> StaffSubjects { get; set; } = new List<StaffSubject>(); //Subject
     }
 }

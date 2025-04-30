@@ -6,6 +6,7 @@ using System.Security.Claims;
 
 namespace SimpleSite.Controllers
 {
+    //Student 
     [Authorize(Roles = "Student")]
     public class StudentsController : Controller
     {

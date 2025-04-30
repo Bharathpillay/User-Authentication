@@ -10,6 +10,10 @@ using System.Threading.Tasks;
 
 namespace SimpleSite.Controllers
 {
+<<<<<<< HEAD
+=======
+    //private Method to calling
+>>>>>>> 54aece9 (sample update)
 
     [Authorize(Roles = "Admin")]
     public class UsersController : Controller
@@ -225,11 +229,15 @@ namespace SimpleSite.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+<<<<<<< HEAD
 //<<<<<<< HEAD
         
 //=======
 //        // PRIVATE METHODS
 //>>>>>>> 012d05d (admin)
+=======
+        
+>>>>>>> 54aece9 (sample update)
 
         private async Task<List<UserViewModel>> GetUserViewModelsAsync()
         {
